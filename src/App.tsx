@@ -1,30 +1,18 @@
 import React from 'react';
 import './App.css';
-import {GoogleMap, Marker, useJsApiLoader} from "@react-google-maps/api";
+import {DrawingManager, GoogleMap, LoadScript, useJsApiLoader} from "@react-google-maps/api";
 
 function App() {
+
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+        libraries:['drawing', 'places']
     })
 
-    const [map, setMap] = React.useState(null)
-
-    const onLoad = React.useCallback(function callback(map) {
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
-        const bounds = new window.google.maps.LatLngBounds(center);
-        map.fitBounds(bounds);
-
-        setMap(map)
-    }, [])
-
-    const onUnmount = React.useCallback(function callback(map) {
-        setMap(null)
-    }, [])
-
     const containerStyle = {
-        width: '400px',
-        height: '400px'
+        width: '100%',
+        height: '100vh'
     };
 
     const center = {
@@ -32,19 +20,17 @@ function App() {
         lng: 77.026344
     };
 
-
     return isLoaded ? (
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
             zoom={10}
-            onLoad={onLoad}
-            onUnmount={onUnmount}
         >
-
-            <Marker position={{lat: 28.471917, lng: 77.072546}} />
+            <DrawingManager onPolygonComplete={(e)=> {
+                console.log(e)
+            }} />
         </GoogleMap>
-    ) : <></>
+    ): <></>
 }
 
 export default App;
