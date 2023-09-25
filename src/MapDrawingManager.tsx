@@ -1,9 +1,7 @@
-import React from 'react';
-import './App.css';
-import {DrawingManager, GoogleMap, LoadScript, useJsApiLoader} from "@react-google-maps/api";
+import {DrawingManager, GoogleMap, useJsApiLoader} from "@react-google-maps/api";
+import React from "react";
 
-function App() {
-
+export default function MapDrawingManager() {
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
@@ -27,12 +25,10 @@ function App() {
             zoom={10}
         >
             <DrawingManager onPolygonComplete={(e)=> {
-               e.getPath().forEach((path)=> {
-                   console.log(path.lat() + " , "+ path.lng())
-               })
+                e.getPath().forEach((path)=> {
+                    console.log(path.lat() + " , "+ path.lng())
+                })
             }} />
         </GoogleMap>
     ): <></>
 }
-
-export default App;
