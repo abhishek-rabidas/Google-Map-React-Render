@@ -1,13 +1,11 @@
 import {
-    DirectionsRenderer,
-    DirectionsService,
+    DirectionsRenderer
 } from "@react-google-maps/api";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function MapRoute() {
 
     const [directions, setDirections] = useState<google.maps.DirectionsResult>();
-    const [directions2, setDirections2] = useState<google.maps.DirectionsResult>();
 
     useEffect(()=> {
         const directionService = new google.maps.DirectionsService();
