@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
-import {DrawingManager, GoogleMap, LoadScript, useJsApiLoader} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader} from "@react-google-maps/api";
+import MapDrawingManager from "./MapDrawingManager";
 
 function App() {
 
@@ -26,11 +27,7 @@ function App() {
             center={center}
             zoom={10}
         >
-            <DrawingManager onPolygonComplete={(e)=> {
-               e.getPath().forEach((path)=> {
-                   console.log(path.lat() + " , "+ path.lng())
-               })
-            }} />
+            <MapDrawingManager />
         </GoogleMap>
     ): <></>
 }
