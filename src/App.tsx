@@ -11,6 +11,11 @@ function App() {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
         libraries: ['drawing', 'places', 'routes']
     })
+    const [placeResponse, setPlaceResponse] = useState<google.maps.LatLng[]>([])
+
+    useEffect(()=> {
+
+    }, [placeResponse])
 
     const containerStyle = {
         width: '100%',
@@ -23,8 +28,6 @@ function App() {
     };
 
     const inputRef:RefObject<HTMLInputElement> = createRef();
-
-    const [placeResponse, setPlaceResponse] = useState([])
 
     const handleSubmit = () => {
         const inputText = inputRef.current.value
@@ -61,22 +64,44 @@ function App() {
 
     }
 
+    const handleSubmitv2 = () => {
+        const inputText = inputRef.current.value
+
+        const url = new URL('https://nominatim.openstreetmap.org/search');
+
+        url.searchParams.append('q', inputText);
+        url.searchParams.append('polygon_geojson', "1")
+        url.searchParams.append('format', 'json')
+
+        fetch(url).then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+        }).then(data => {
+            let polygon:google.maps.LatLng[] = [];
+            // @ts-ignore
+            data[0].geojson.coordinates[0].map(coordinate => polygon.push({
+                lat: coordinate[1], lng: coordinate[0]
+            }))
+
+            console.log(polygon)
+            setPlaceResponse(polygon)
+        })
+
+    }
+
     return isLoaded ? (
         <>
             <input type={'text'} placeholder={'Enter address'} ref={inputRef}/>
-            <button onClick={handleSubmit}>Submit</button>
+            <button onClick={handleSubmit}>Google Map</button>
+            <button onClick={handleSubmitv2}>Open Street</button>
 
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
                 zoom={10}
             >
-                <Marker label={"NW"} position={placeResponse.at(0)}></Marker>
-                <Marker label={"NE"} position={placeResponse.at(1)}></Marker>
-                <Marker label={"SE"} position={placeResponse.at(2)}></Marker>
-                <Marker label={"SW"} position={placeResponse.at(3)}></Marker>
-
-                <Polygon paths={placeResponse} options={{geodesic: false, fillColor: 'blue', fillOpacity: 0, strokeWeight: 0.3, strokeColor: 'blue'}}></Polygon>
+                <Polygon path={placeResponse} options={{geodesic: false, fillColor: 'blue', strokeWeight: 0.3, strokeColor: 'blue'}}></Polygon>
             </GoogleMap>
         </>
     ) : <></>
