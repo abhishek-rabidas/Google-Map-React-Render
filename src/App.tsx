@@ -3,7 +3,6 @@ import './App.css';
 import {GoogleMap, Marker, Polygon, useJsApiLoader} from "@react-google-maps/api";
 import MapDrawingManager from "./MapDrawingManager";
 import MapRoute from "./MapRoute";
-import MapZoning from "./Zoning";
 
 function App() {
 
