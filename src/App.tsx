@@ -3,6 +3,7 @@ import './App.css';
 import { GoogleMap, useJsApiLoader} from "@react-google-maps/api";
 import MapDrawingManager from "./MapDrawingManager";
 import MapRoute from "./MapRoute";
+import MapZoning from "./Zoning";
 
 function App() {
 
@@ -23,6 +24,8 @@ function App() {
     };
 
     return isLoaded ? (
+        <>
+        <MapZoning />
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
@@ -30,6 +33,7 @@ function App() {
         >
             <MapRoute />
         </GoogleMap>
+        </>
     ): <></>
 }
 
